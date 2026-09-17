@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "mode": "persuade",
+  "world": "Editorial talent dossier",
+  "artifact": "editorial",
+  "tokens": {
+    "color": {
+      "bg": "#f6efe5",
+      "ink": "#201b18",
+      "muted": "#665c52",
+      "line": "#cbbbad",
+      "panel": "#e9d9c9",
+      "accent": "#cf5b3f",
+      "inverse": "#211b18",
+      "inverseInk": "#f8f0e7"
+    },
+    "typography": {
+      "display": "Noto Serif Thai",
+      "body": "Noto Sans Thai",
+      "utility": "system monospace"
+    },
+    "spacing": {
+      "page": "clamp(18px, 5vw, 76px)",
+      "section": "clamp(67px, 10vw, 144px)"
+    },
+    "shape": {
+      "radius": "world-specific",
+      "elevation": "one deliberate surface system"
+    }
+  }
+}
