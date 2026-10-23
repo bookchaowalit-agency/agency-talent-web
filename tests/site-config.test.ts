@@ -38,6 +38,22 @@ describe('site config', () => {
     }
   });
 
+  it('rejects base URLs whose query, fragment or credentials would leak into every canonical link', async () => {
+    for (const value of ['https://example.com/?ref=x', 'https://example.com/#top', 'https://example.com/?', 'https://user:secret@example.com']) {
+      const { siteConfig } = await loadConfig({ NEXT_PUBLIC_SITE_URL: value, NEXT_PUBLIC_SITE_INDEXABLE: 'true' });
+      expect(siteConfig.publicUrl, value).toBeUndefined();
+      expect(siteConfig.isIndexable, value).toBe(false);
+    }
+  });
+
+  it('strips every trailing slash so absolute URLs never contain //', async () => {
+    const { siteConfig, absoluteUrl } = await loadConfig({ NEXT_PUBLIC_SITE_URL: 'https://example.com//', NEXT_PUBLIC_SITE_INDEXABLE: 'true' });
+    expect(siteConfig.publicUrl).toBe('https://example.com');
+    expect(absoluteUrl('/services')).toBe('https://example.com/services');
+    const base = await loadConfig({ NEXT_PUBLIC_SITE_URL: 'https://example.com/base/', NEXT_PUBLIC_SITE_INDEXABLE: 'true' });
+    expect(base.absoluteUrl('/services')).toBe('https://example.com/base/services');
+  });
+
   it('needs both a public URL and NEXT_PUBLIC_SITE_INDEXABLE=true to be indexable', async () => {
     const notApproved = await loadConfig({ NEXT_PUBLIC_SITE_URL: 'https://example.com', NEXT_PUBLIC_SITE_INDEXABLE: 'yes' });
     expect(notApproved.siteConfig.publicUrl).toBe('https://example.com');
