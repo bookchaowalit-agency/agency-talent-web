@@ -1,25 +1,48 @@
 # Talent — Talent & Workforce
 
-แยกเป็น showcase site สำหรับ Talent ของ Solo Empire ใช้เพื่อแสดง positioning และทดสอบ message เท่านั้น
+Static showcase site for the Talent vertical of Solo Empire. It shows positioning and is used for message
+testing only: one home page and one service page, built from data in `lib/`.
 
 - Visual world: Editorial talent dossier
-- Suggested Vercel project: `solo-agency-talent`
-- Route: \/
-- สถานะ commercial: `incubating` / P0
-- ไม่มี database, authentication, API, payment, lead form หรือข้อมูลลูกค้า
+- Vercel project: `solo-agency-talent` (live: https://solo-agency-talent.vercel.app, deployed by Vercel CLI; it can lag `main`, see `PRODUCT.md`)
+- Routes: `/`, `/services/`, `/services/technical-recruitment-pilot/`
+- Commercial status: `incubating` / P0 (กำลังเปิดรอบ validation)
+- No database, authentication, API, payment, lead form or customer data.
 
-## Local
+## What it does not do
+
+- A working page for specialist search — not a candidate database.
+- No inquiry intake, contact form, client records or case studies. Earlier freelance/client work is not counted as an
+  agency customer here.
+- It is `noindex` with `Disallow: /` unless `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_SITE_INDEXABLE=true` are both set
+  (an approved public URL).
+
+## Run
 
 ```bash
-npm install
-npm run check
-npm run dev
+npm ci
+npm run dev        # http://localhost:3010
 ```
 
-Build ใช้ Next.js static export และสร้าง artifact ที่ `out/` สำหรับ deploy แบบ static บน Vercel
+## Checks
 
-ข้อมูล public-safe มาจาก agency brief/control-plane; งาน freelance/client เดิมไม่ถูกนับเป็น agency customer หรือ case study ในเว็บนี้
+```bash
+npm run lint       # ESLint (eslint-config-next)
+npm run typecheck
+npm test           # Vitest: site config + robots/sitemap, service data, page renders, Sentry scrubbing
+npm run check      # typecheck + static export to out/ (bundled Thai fonts)
+```
 
-## pSEO service page
+CI (`.github/workflows/ci.yml`) runs the shared Node workflow (lint, typecheck, Vitest with a line-coverage gate,
+then `npm run check`) and the shared security scan on every push and PR to `main`.
 
-เว็บนี้มีหน้า service แบบ static ที่ /services/technical-recruitment-pilot/ สำหรับ intent ของ Talent โดยแยก workflow, deliverables, evidence boundary และ readiness gate ไว้ชัดเจน หน้าเริ่มต้นเป็น noindex และไม่มีการรับ inquiry หรือข้อมูลลูกค้า
+## Code map
+
+- `lib/site.ts`: the vertical's public-safe copy and design tokens. `lib/pseo.ts`: the one service page.
+- `lib/readiness.ts`: status label and note, shared by the home and service pages.
+- `lib/site-config.ts`: public URL parsing, the indexable switch, canonical URLs and page metadata.
+- `app/robots.ts`, `app/sitemap.ts`: `Disallow: /` and an empty sitemap unless indexing is approved.
+- `lib/sentry.ts` + `instrumentation-client.ts`: browser-only error reporting (static export, no server runtime),
+  errors only, personal data stripped; off when `NEXT_PUBLIC_SENTRY_DSN` is unset.
+- This repo was generated from `agency-main-web`; its copies of CI, Sentry and Vitest were added by hand in batch
+  b-website (2026-10-22/23). Each agency repo owns its own copy (no shared package).
