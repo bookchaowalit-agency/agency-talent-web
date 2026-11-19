@@ -21,6 +21,16 @@ describe('home page', () => {
     expect(html).toContain('no client claims');
   });
 
+  it('lets screen readers read the Role scorecard example (only its decoration is hidden)', () => {
+    const html = renderToString(<HomePage />);
+    const art = html.match(/<div class="artifact artifact-editorial"[^>]*>/)?.[0] ?? '';
+    expect(art).not.toContain('aria-hidden');
+    expect(art).toContain('aria-label="ตัวอย่าง Role scorecard"');
+    const list = html.match(/<ol class="editorial-rows"[^>]*>([\s\S]*?)<\/ol>/);
+    expect(list?.[0]).not.toContain('aria-hidden');
+    expect(list?.[1].replace(/<[^>]*>/g, '|')).toContain('ผลลัพธ์ที่ role ต้องส่ง');
+  });
+
   it('links twice to the pre-rendered service page and has no form', () => {
     const html = renderToString(<HomePage />);
     // next/link adds the trailing slash (trailingSlash: true) only inside a Next build.
