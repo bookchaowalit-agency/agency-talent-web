@@ -21,6 +21,7 @@ export const site = {
   "status": "incubating",
   "design": {
     "projectName": "solo-agency-talent",
+    "productionUrl": "https://solo-agency-talent.vercel.app",
     "archetype": "editorial",
     "motif": "editorial",
     "world": "Editorial talent dossier",
