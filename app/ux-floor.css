@@ -6,9 +6,9 @@
  * Floor values (focus ring, 44px targets, Thai heading leading) come from design-floor/tokens.css.
  */
 
-/* Focus: one 3px ring with a 2px offset everywhere (replaces the old 2px / 5px link-only rule). Without a site
+/* Focus: one 3px ring with a 5px offset everywhere (replaces the old 2px / 5px link-only rule). Without a site
    --focus the ring is --ink, not --accent: a light accent (e.g. #83b936 on #edf5f4, 2.1:1) misses 3:1 on --bg. */
-:focus-visible, a:focus-visible { outline: var(--focus-ring-width, 3px) solid var(--focus, var(--ink)); outline-offset: var(--focus-ring-offset, 2px); }
+:focus-visible, a:focus-visible, :where(button, input, select, summary):focus-visible { outline: var(--focus-ring-width, 3px) solid var(--focus, var(--ink)); outline-offset: 5px; }
 ::selection { color: var(--inverse-ink); background: var(--inverse); }
 html { scroll-padding-top: 24px; }
 
@@ -73,7 +73,7 @@ html { scroll-padding-top: 24px; }
 /* .readiness-note span styles the status line; the link's arrow span must stay inline. */
 .readiness-note .readiness-link span { display: inline; margin: 0; padding: 0; border: 0; color: inherit; font-family: inherit; font-size: inherit; }
 
-/* Footer: hub, portfolio, privacy, status and contact links. */
+/* Footer links: readable labels and large tap targets. */
 .site-footer, .pseo-footer { flex-wrap: wrap; align-items: center; }
 .site-links { display: flex; flex-wrap: wrap; gap: 0 18px; width: 100%; font-family: var(--sans); font-size: 14px; letter-spacing: normal; text-transform: none; }
 .site-links a { display: inline-flex; align-items: center; min-height: var(--target-touch, 44px); color: var(--ink); text-underline-offset: 4px; }
